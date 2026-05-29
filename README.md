@@ -2,8 +2,8 @@
 
 > The most efficient, reliable, and developer-friendly way to use the Google Scholar Lite API.
 
-**Actor page:** [apify.com/johnvc/google-scholar-lite](https://apify.com/johnvc/google-scholar-lite?fpr=9n7kx3)
-**Input schema:** [apify.com/johnvc/google-scholar-lite/input-schema](https://apify.com/johnvc/google-scholar-lite/input-schema?fpr=9n7kx3)
+**Actor page:** [apify.com/johnvc/google-scholar-lite-api](https://apify.com/johnvc/google-scholar-lite-api?fpr=9n7kx3)
+**Input schema:** [apify.com/johnvc/google-scholar-lite-api/input-schema](https://apify.com/johnvc/google-scholar-lite-api/input-schema?fpr=9n7kx3)
 
 Search Google Scholar in bulk and get clean, structured JSON for every academic paper: title, the authors and journal line, publication year, citation count, a result snippet, and links to the paper plus its PDF or HTML full text when available. Pass many search queries at once, filter by year range, and pay only for the papers you receive (from $1.50 per 1,000, no setup or per-run fee). It is built for literature reviews, citation discovery, and research datasets.
 
@@ -136,7 +136,7 @@ Papers that expose a PDF include a `pdfUrl` field pointing at the full text.
 You can also load this API as a tool in your AI assistant through the Apify MCP server. The server URL preloads just this one Actor:
 
 ```
-https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite
+https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite-api
 ```
 
 The `actors` and `docs` tools let the assistant discover and read Apify docs, while preloading just this one Actor keeps the tool list small. Auth is either OAuth in the browser when offered, or your Apify API token (the same `APIFY_API_TOKEN` secret used by the Python example). Get a token at https://console.apify.com/settings/integrations and a free Apify account at https://apify.com?fpr=9n7kx3 .
@@ -162,7 +162,7 @@ Cowork is the desktop app's automation mode. To give it the Google Scholar Lite 
       "args": [
         "-y",
         "mcp-remote",
-        "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite"
+        "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite-api"
       ]
     }
   }
@@ -183,14 +183,14 @@ Claude Code is the command-line tool. Add the Actor's MCP server with one comman
 
 ```bash
 claude mcp add --transport http apify \
-  "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite"
+  "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite-api"
 ```
 
 To use a token instead of browser OAuth:
 
 ```bash
 claude mcp add --transport http apify \
-  "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite" \
+  "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite-api" \
   --header "Authorization: Bearer YOUR_APIFY_TOKEN"
 ```
 
@@ -206,9 +206,9 @@ Claude Code MCP docs: https://code.claude.com/docs/en/mcp
 On claude.ai you add Apify as a connector, then enable just this Actor's tool.
 
 1. Go to **Settings → Connectors → Browse connectors** and search for **Apify MCP server**. Install it (enable or update if prompted).
-2. When connecting, authenticate with your Apify API token, and enable the tool `johnvc/google-scholar-lite`.
+2. When connecting, authenticate with your Apify API token, and enable the tool `johnvc/google-scholar-lite-api`.
 3. In any chat, open **+ → Connectors** and turn on **Apify**.
-4. Alternatively, choose **Add custom connector** and paste the full MCP URL `https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite`, using OAuth when prompted.
+4. Alternatively, choose **Add custom connector** and paste the full MCP URL `https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite-api`, using OAuth when prompted.
 5. Ask Claude to run the Google Scholar Lite API.
 
 Open Claude on the web: https://claude.ai
@@ -225,7 +225,7 @@ Cursor reads MCP servers from a project file at `.cursor/mcp.json`.
 {
   "mcpServers": {
     "apify": {
-      "url": "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite"
+      "url": "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite-api"
     }
   }
 }
@@ -237,7 +237,7 @@ Cursor reads MCP servers from a project file at `.cursor/mcp.json`.
 {
   "mcpServers": {
     "apify": {
-      "url": "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite",
+      "url": "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite-api",
       "headers": { "Authorization": "Bearer YOUR_APIFY_TOKEN" }
     }
   }

@@ -1,7 +1,7 @@
 """
 Google Scholar Lite API: A Quick Start Example
-See more at: https://apify.com/johnvc/google-scholar-lite?fpr=9n7kx3
-Input schema: https://apify.com/johnvc/google-scholar-lite/input-schema?fpr=9n7kx3
+See more at: https://apify.com/johnvc/google-scholar-lite-api?fpr=9n7kx3
+Input schema: https://apify.com/johnvc/google-scholar-lite-api/input-schema?fpr=9n7kx3
 
 This script shows how to call the Google Scholar Lite API on Apify from Python and
 read its structured JSON output. It searches Google Scholar for academic papers and
@@ -35,7 +35,7 @@ run_input = {
 }
 
 # Run the Actor and wait for it to finish
-run = client.actor("johnvc/google-scholar-lite").call(run_input=run_input)
+run = client.actor("johnvc/google-scholar-lite-api").call(run_input=run_input)
 
 # Read structured results from the run's default dataset.
 # apify-client 3.x returns a typed Run object, so use the attribute (not run["..."]).

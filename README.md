@@ -1,0 +1,258 @@
+# 🎓 Google Scholar Lite API: cheap, fast, bulk academic paper search
+
+> The most efficient, reliable, and developer-friendly way to use the Google Scholar Lite API.
+
+**Actor page:** [apify.com/johnvc/google-scholar-lite](https://apify.com/johnvc/google-scholar-lite?fpr=9n7kx3)
+**Input schema:** [apify.com/johnvc/google-scholar-lite/input-schema](https://apify.com/johnvc/google-scholar-lite/input-schema?fpr=9n7kx3)
+
+Search Google Scholar in bulk and get clean, structured JSON for every academic paper: title, the authors and journal line, publication year, citation count, a result snippet, and links to the paper plus its PDF or HTML full text when available. Pass many search queries at once, filter by year range, and pay only for the papers you receive (from $1.50 per 1,000, no setup or per-run fee). It is built for literature reviews, citation discovery, and research datasets.
+
+## Video Walkthrough
+
+[![Watch the walkthrough](https://img.youtube.com/vi/jREWahDGhJM/maxresdefault.jpg)](https://www.youtube.com/watch?v=jREWahDGhJM)
+
+## Quick Start
+
+### Prerequisites
+- Python 3.10 or higher
+- An Apify account and API key ([get a free key here](https://apify.com?fpr=9n7kx3))
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/johnisanerd/Apify-Google-Scholar-Lite-API.git
+   cd Apify-Google-Scholar-Lite-API
+   ```
+
+2. **Install dependencies with UV**
+   ```bash
+   # Install UV if you do not have it:
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+
+   # Install project dependencies:
+   uv sync
+   ```
+
+3. **Configure your API key**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your Apify API key
+   # Get your free API key at: https://apify.com?fpr=9n7kx3
+   ```
+
+4. **Run the example**
+   ```bash
+   uv run python google-scholar-lite-api-example.py
+   ```
+
+### Alternative: set the API key directly
+```bash
+export APIFY_API_TOKEN="your_api_key_here"
+uv run python google-scholar-lite-api-example.py
+```
+
+## Why Use This Google Scholar Lite API?
+
+**Bulk by design.** Pass a list of search queries and get one clean row per paper across all of them, tagged with the query that found it. Build a literature-review shortlist or a bibliometric dataset in a single run.
+
+**Pay only for what you get.** Billing is per paper returned, from $1.50 per 1,000, with no setup fee and no per-run fee. Niche or tightly year-filtered queries simply cost less because they return fewer papers.
+
+**Clean, predictable JSON.** Every paper comes back with the same field set, so you can load it straight into a dataframe, a database, or an AI pipeline without reshaping.
+
+**Year filtering built in.** Bound results with `yearFrom` and `yearTo` to focus on recent work or a specific historical window.
+
+**Fast and reliable.** It talks to a structured search API instead of driving a slow, breakable headless browser, so runs are quick and consistent.
+
+**Need more depth?** This is the Lite tier: no full PDF text extraction, no author profiles (h-index, publication lists), and no citation-network walking. For those, use the full-featured [Google Scholar API](https://apify.com/johnvc/google-scholar-api?fpr=9n7kx3).
+
+## Features
+
+### Core Capabilities
+- Multi-query search: pass many `searchTerms` and get results for each
+- Year-range filtering with `yearFrom` and `yearTo`
+- Per-query result cap with `maxResultsPerSearch`
+- Language selection with a two-letter `language` code
+- Automatic pagination and per-query de-duplication
+
+### Data Quality
+- One consistent row per paper: title, publication line, year, citation count, snippet
+- Direct `link`, plus `pdfUrl` / `htmlUrl` full-text links when available
+- Implausible years are filtered out so the data stays clean
+- A stable result `id` and the source `searchTerm` on every row
+
+## Usage Examples
+
+### Basic Example
+```json
+{
+  "searchTerms": ["transformer attention mechanism"],
+  "maxResultsPerSearch": 10
+}
+```
+
+### Advanced Example
+```json
+{
+  "searchTerms": ["transformer attention mechanism", "diffusion models"],
+  "yearFrom": 2020,
+  "yearTo": 2026,
+  "language": "en",
+  "maxResultsPerSearch": 100
+}
+```
+
+## Input Parameters
+
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| `searchTerms` | `array<str>` | YES | - | One or more search queries. Each is searched independently and billed per paper returned. |
+| `yearFrom` | `int` | no | - | Earliest publication year, for example `2020`. Leave unset for no lower bound. |
+| `yearTo` | `int` | no | - | Latest publication year, for example `2026`. Leave unset for no upper bound. |
+| `maxResultsPerSearch` | `int` | no | `100` | Papers to return per query (minimum 10). Results come in pages of about 10. |
+| `language` | `str` | no | `en` | Two-letter interface language code, for example `en`, `es`, `de`. |
+
+## Output Format
+
+One item per paper, in the run's default dataset:
+
+```json
+{
+  "searchTerm": "transformer attention mechanism",
+  "position": 1,
+  "title": "Transformer architecture and attention mechanisms in genome data analysis: a comprehensive review",
+  "link": "https://www.mdpi.com/2079-7737/12/7/1033",
+  "publicationInfo": "SR Choi, M Lee - Biology, 2023 - mdpi.com",
+  "snippet": "... the transformer architecture and the attention mechanism in specific application of transformers and attention methods ...",
+  "year": 2023,
+  "citedBy": 293,
+  "htmlUrl": "https://www.mdpi.com/2079-7737/12/7/1033",
+  "id": "LY1VJ0g70YsJ"
+}
+```
+
+Papers that expose a PDF include a `pdfUrl` field pointing at the full text.
+
+---
+
+You can also load this API as a tool in your AI assistant through the Apify MCP server. The server URL preloads just this one Actor:
+
+```
+https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite
+```
+
+The `actors` and `docs` tools let the assistant discover and read Apify docs, while preloading just this one Actor keeps the tool list small. Auth is either OAuth in the browser when offered, or your Apify API token (the same `APIFY_API_TOKEN` secret used by the Python example). Get a token at https://console.apify.com/settings/integrations and a free Apify account at https://apify.com?fpr=9n7kx3 .
+
+> Note: the four screenshots below are placeholders. Open the configurator at the MCP server URL above, pick each client's setup tab, and replace the matching file in `screenshots/` with a real capture.
+
+## Install in Claude Cowork Desktop
+
+![Install in Claude Cowork Desktop](screenshots/01-claude-cowork-desktop.png)
+
+Cowork is the desktop app's automation mode. To give it the Google Scholar Lite API as a tool, add the Apify MCP server as a connector.
+
+1. Open the Claude desktop app and go to **Settings → Connectors** (or **Settings → Developer → Edit Config** to edit `claude_desktop_config.json` directly).
+   - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+2. Add the Apify MCP server, preloaded with only this Actor:
+
+```json
+{
+  "mcpServers": {
+    "apify": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite"
+      ]
+    }
+  }
+}
+```
+
+3. Restart the app. When Cowork first calls the tool, complete the OAuth prompt in your browser, or add your Apify API token in the connector settings to skip OAuth.
+4. In a Cowork chat, confirm the tool is available and ask it to run the Google Scholar Lite API.
+
+Download the desktop app and start a free trial: https://claude.ai/referral/uIlpa7nPLg
+More help: https://docs.apify.com/platform/integrations/claude-desktop
+
+## Install in Claude Code
+
+![Install in Claude Code](screenshots/02-claude-code.png)
+
+Claude Code is the command-line tool. Add the Actor's MCP server with one command:
+
+```bash
+claude mcp add --transport http apify \
+  "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite"
+```
+
+To use a token instead of browser OAuth:
+
+```bash
+claude mcp add --transport http apify \
+  "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite" \
+  --header "Authorization: Bearer YOUR_APIFY_TOKEN"
+```
+
+Then verify with `claude mcp list`, or run `/mcp` inside a session. Ask Claude Code to call the Google Scholar Lite API.
+
+Try Claude Code free: https://claude.ai/referral/uIlpa7nPLg
+Claude Code MCP docs: https://code.claude.com/docs/en/mcp
+
+## Install in Claude (website)
+
+![Install in Claude website](screenshots/03-claude-website.png)
+
+On claude.ai you add Apify as a connector, then enable just this Actor's tool.
+
+1. Go to **Settings → Connectors → Browse connectors** and search for **Apify MCP server**. Install it (enable or update if prompted).
+2. When connecting, authenticate with your Apify API token, and enable the tool `johnvc/google-scholar-lite`.
+3. In any chat, open **+ → Connectors** and turn on **Apify**.
+4. Alternatively, choose **Add custom connector** and paste the full MCP URL `https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite`, using OAuth when prompted.
+5. Ask Claude to run the Google Scholar Lite API.
+
+Open Claude on the web: https://claude.ai
+
+## Install in Cursor
+
+![Install in Cursor](screenshots/04-cursor.png)
+
+Cursor reads MCP servers from a project file at `.cursor/mcp.json`.
+
+1. In your project, create `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "apify": {
+      "url": "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite"
+    }
+  }
+}
+```
+
+2. If you prefer token auth over browser OAuth, add a header:
+
+```json
+{
+  "mcpServers": {
+    "apify": {
+      "url": "https://mcp.apify.com/?tools=actors,docs,johnvc/google-scholar-lite",
+      "headers": { "Authorization": "Bearer YOUR_APIFY_TOKEN" }
+    }
+  }
+}
+```
+
+3. Open **Cursor → Settings → MCP** and confirm the **apify** server is connected (green dot).
+4. In Composer or Chat, ask Cursor to call the Google Scholar Lite API.
+
+New to Cursor? Get it here: https://cursor.com/referral?code=XQP4VBLI3NNX
+
+---
+
+[**Made with care**](https://apify.com/johnvc?fpr=9n7kx3)
+
+*Use the Google Scholar Lite API to power your research and bibliometric workflows with reliable, structured results.*
+
+Last Updated: 2026.05.29

@@ -269,4 +269,4 @@ More help: https://docs.apify.com/platform/integrations/mcp
 
 *Use the Google Scholar Lite API to power your research and bibliometric workflows with reliable, structured results.*
 
-Last Updated: 2026.07.22
+Last Updated: 2026.07.24
